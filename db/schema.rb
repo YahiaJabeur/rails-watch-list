@@ -10,14 +10,14 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_11_28_143005) do
+ActiveRecord::Schema[7.1].define(version: 2024_11_29_081856) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
   create_table "bookmarks", force: :cascade do |t|
-    t.bigint "movie_id", null: false
-    t.bigint "list_id", null: false
     t.text "comment"
+    t.bigint "list_id", null: false
+    t.bigint "movie_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["list_id"], name: "index_bookmarks_on_list_id"

@@ -1,8 +1,17 @@
 class Movie < ApplicationRecord
-  has_many :bookmarks, dependent: :restrict_with_error # Prevent deletion if referenced
+  has_many :bookmarks
   has_many :lists, through: :bookmarks
 
   validates :title, presence: true, uniqueness: true
-  validates :overview, presence: true, uniqueness: true
-  validates :rating, numericality: { greater_than_or_equal_to: 0, less_than_or_equal_to: 10 }
+  validates :overview, presence: true
+
+  before_destroy :prevent_destroy_if_bookmarked
+
+  private
+
+  def prevent_destroy_if_bookmarked
+    if bookmarks.any?
+      raise ActiveRecord::InvalidForeignKey
+    end
+  end
 end
