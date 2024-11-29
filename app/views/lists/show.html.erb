@@ -1,6 +1,12 @@
+<div class="hero-header mb-5" style="background-image: url('<%= asset_path 'cinema.webp' %>'); background-size: cover; background-position: center;">
+  <div class="container py-5 text-center text-white">
+    <h1 class="display-4 fw-bold mb-3 text-shadow"><%= @list.name %></h1>
+    <p class="lead text-shadow">Your Personal Movie Collection</p>
+  </div>
+</div>
+
 <div class="container py-5">
   <div class="d-flex align-items-center justify-content-between mb-3">
-    <h1><%= @list.name %></h1>
     <div>
       <%= link_to "Back to all lists", lists_path, class: "btn btn-outline-secondary me-2" %>
       <%= link_to "Add a movie", new_list_bookmark_path(@list), class: "btn btn-primary" %>
@@ -14,9 +20,21 @@
         <div class="row">
           <% @list.bookmarks.each do |bookmark| %>
             <div class="col-md-4 mb-4">
-              <div class="card">
+              <div class="card h-100">
+                <% if bookmark.movie.poster_url.present? %>
+                  <%= image_tag bookmark.movie.poster_url, class: "card-img-top", alt: "#{bookmark.movie.title} poster" %>
+                <% else %>
+                  <div class="card-img-top bg-light d-flex justify-content-center align-items-center" style="height: 300px;">
+                    <p class="text-muted">No poster available</p>
+                  </div>
+                <% end %>
                 <div class="card-body">
-                  <h5 class="card-title"><%= bookmark.movie.title %></h5>
+                  <div class="d-flex justify-content-between align-items-center mb-2">
+                    <h5 class="card-title mb-0"><%= bookmark.movie.title %></h5>
+                    <span class="badge bg-warning text-dark">
+                      <i class="fas fa-star"></i> <%= bookmark.movie.rating %>/10
+                    </span>
+                  </div>
                   <p class="card-text"><%= bookmark.comment %></p>
                   <%= link_to bookmark_path(bookmark), 
                       data: { turbo_method: :delete, turbo_confirm: "Are you sure you want to remove this bookmark?" }, 
